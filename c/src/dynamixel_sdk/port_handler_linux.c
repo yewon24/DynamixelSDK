@@ -201,7 +201,7 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 void setPacketTimeoutLinux(int port_num, uint16_t packet_length)
 {
   portData[port_num].packet_start_time = getCurrentTimeLinux();
-  portData[port_num].packet_timeout = 100; //(portData[port_num].tx_time_per_byte * (double)packet_length) + (LATENCY_TIMER * 2.0) + 2.0;
+  portData[port_num].packet_timeout = (portData[port_num].tx_time_per_byte * (double)packet_length) + (LATENCY_TIMER * 2.0) + 2.0;
 }
 
 void setPacketTimeoutMSecLinux(int port_num, double msec)
