@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <wiringPi.h>
 
 #define TXPACKET_MAX_LEN    (1*1024)
 #define RXPACKET_MAX_LEN    (1*1024)
@@ -321,6 +322,9 @@ void removeStuffing(uint8_t *packet)
 
 void txPacket2(int port_num)
 {
+  //digitalWrite(4, 1);
+  //printf("txPacket2\n");
+ 
   uint16_t total_packet_length = 0;
   uint16_t written_packet_length = 0;
   uint16_t crc;
@@ -371,6 +375,9 @@ void txPacket2(int port_num)
 
 void rxPacket2(int port_num)
 {
+  //digitalWrite(4, 0);
+  //printf("rxPacket2\n");
+
   uint16_t s;
   uint16_t idx;
   uint16_t rx_length = 0;
