@@ -192,7 +192,11 @@ int readPortLinux(int port_num, uint8_t *packet, int length)
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
 {
-  return write(portData[port_num].socket_fd, packet, length);
+  digitalWrite(4, HIGH);
+  int ret=0;
+  ret=write(portData[port_num].socket_fd, packet, length);
+  digitalWrite(4, LOW);
+  return ret;
 }
 
 void setPacketTimeoutLinux(int port_num, uint16_t packet_length)
@@ -278,7 +282,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
   usleep (10000) ;	// 10mS
-  digitalWrite(4, HIGH);
+//  digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;

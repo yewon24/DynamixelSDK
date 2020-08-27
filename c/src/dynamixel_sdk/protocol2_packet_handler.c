@@ -358,8 +358,14 @@ void txPacket2(int port_num)
   packetData[port_num].tx_packet[total_packet_length - 1] = DXL_HIBYTE(crc);
 
   // tx packet
+  //usleep(10000);
+  digitalWrite(4, HIGH);
+  usleep(10000);
   clearPort(port_num);
   written_packet_length = writePort(port_num, packetData[port_num].tx_packet, total_packet_length);
+  //usleep(10000);
+  digitalWrite(4, LOW);
+
   if (total_packet_length != written_packet_length)
   {
     g_is_using[port_num] = False;
