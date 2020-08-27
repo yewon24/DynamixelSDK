@@ -108,8 +108,6 @@ int portHandlerLinux(const char *port_name)
     {
       printf("[PortHandler setup] The port number %d has same device name... reinitialize port number %d!!\n", port_num, port_num);
     }
-
-    pinMode(4, OUTPUT);
   }
 
   portData[port_num].socket_fd = -1;
@@ -122,6 +120,8 @@ int portHandlerLinux(const char *port_name)
 
   setPortNameLinux(port_num, port_name);
  
+  pinMode(4, OUTPUT); 
+
   return port_num;
 }
 
@@ -192,10 +192,12 @@ int readPortLinux(int port_num, uint8_t *packet, int length)
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
 {
-  digitalWrite(4, HIGH);
+//  usleep(10000);
+//  digitalWrite(4, HIGH);
   int ret=0;
   ret=write(portData[port_num].socket_fd, packet, length);
-  digitalWrite(4, LOW);
+//  usleep(10000);
+//  digitalWrite(4, LOW);
   return ret;
 }
 
@@ -241,8 +243,6 @@ double getTimeSinceStartLinux(int port_num)
 
 uint8_t setupPortLinux(int port_num, int cflag_baud)
 {
-
-  printf("Here in setupPortLinux\n");
   struct termios newtio;
   int status;
 

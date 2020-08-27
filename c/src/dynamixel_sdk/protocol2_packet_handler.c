@@ -358,12 +358,12 @@ void txPacket2(int port_num)
   packetData[port_num].tx_packet[total_packet_length - 1] = DXL_HIBYTE(crc);
 
   // tx packet
-  //usleep(10000);
-  digitalWrite(4, HIGH);
   usleep(10000);
+  digitalWrite(4, HIGH);
+//  usleep(10000);
   clearPort(port_num);
   written_packet_length = writePort(port_num, packetData[port_num].tx_packet, total_packet_length);
-  //usleep(10000);
+  usleep(50000);
   digitalWrite(4, LOW);
 
   if (total_packet_length != written_packet_length)
@@ -392,7 +392,6 @@ void rxPacket2(int port_num)
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
     if (rx_length >= wait_length)
     {
-      printf("rx_length >= wait_length\n");
       idx = 0;
 
       // find packet header
@@ -428,7 +427,6 @@ void rxPacket2(int port_num)
 
         if (rx_length < wait_length)
         {
-	  printf("1. rx_length < wait_length");
           // check timeout
           if (isPacketTimeout(port_num) == True)
           {
@@ -438,7 +436,6 @@ void rxPacket2(int port_num)
             }
             else
             {
-	      printf("  rx_length != 0\n");
               packetData[port_num].communication_result = COMM_RX_CORRUPT;
             }
             break;
@@ -457,7 +454,6 @@ void rxPacket2(int port_num)
         }
         else
         {
-	  printf("verify crc error\n");
           packetData[port_num].communication_result = COMM_RX_CORRUPT;
         }
         break;
@@ -478,7 +474,6 @@ void rxPacket2(int port_num)
       // check timeout
       if (isPacketTimeout(port_num) == True)
       {
-	printf("rx_length < wait_length\n");
         if (rx_length == 0)
         {
           packetData[port_num].communication_result = COMM_RX_TIMEOUT;
