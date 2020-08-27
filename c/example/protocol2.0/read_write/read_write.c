@@ -161,7 +161,7 @@ int main()
 
 
   // Enable Dynamixel Torque
-  write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE);
+  write1ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 65, 1);
   if ((dxl_comm_result = getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
   {
     printf("%s\n", getTxRxResult(PROTOCOL_VERSION, dxl_comm_result));

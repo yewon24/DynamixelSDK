@@ -108,6 +108,8 @@ int portHandlerLinux(const char *port_name)
     {
       printf("[PortHandler setup] The port number %d has same device name... reinitialize port number %d!!\n", port_num, port_num);
     }
+
+    pinMode(4, OUTPUT);
   }
 
   portData[port_num].socket_fd = -1;
@@ -190,12 +192,7 @@ int readPortLinux(int port_num, uint8_t *packet, int length)
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
 {
-  usleep(10000);
-  digitalWrite(4, 1);
   return write(portData[port_num].socket_fd, packet, length);
-  usleep(10000);
-  digitalWrite(4, 0);
-  usleep(10000);
 }
 
 void setPacketTimeoutLinux(int port_num, uint16_t packet_length)
@@ -243,7 +240,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
 
   printf("Here setupPortLinux\n");
   struct termios newtio;
-//  int status;
+  int status;
 
   portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
 
@@ -252,14 +249,12 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
     printf("[PortHandlerLinux::SetupPort] Error opening serial port!\n");
     return False;
   }
-  
-  pinMode(4, OUTPUT);
 
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
  
-//  cfmakeraw   (&newtio) ;
-//  cfsetispeed (&newtio, cflag_baud) ;
-//  cfsetospeed (&newtio, cflag_baud) ;
+ cfmakeraw   (&newtio) ;
+ cfsetispeed (&newtio, cflag_baud) ;
+ cfsetospeed (&newtio, cflag_baud) ;
 
   newtio.c_cflag |= (CLOCAL | CREAD) ;
   newtio.c_cflag &= ~PARENB ;
@@ -275,12 +270,15 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   tcflush(portData[port_num].socket_fd, TCIFLUSH);
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
-//  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
+  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
 
-//  status |= TIOCM_DTR ;
-//  status |= TIOCM_RTS ;
+  status |= TIOCM_DTR ;
+  status |= TIOCM_RTS ;
 
-//  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
+  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
+
+  usleep (10000) ;	// 10mS
+  digitalWrite(4, 1);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
