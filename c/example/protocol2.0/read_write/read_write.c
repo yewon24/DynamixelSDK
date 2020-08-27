@@ -175,6 +175,11 @@ int main()
     printf("Dynamixel has been successfully connected \n");
   }
 
+  delay(1000);
+  write1ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 65, 0);
+
+  while(1);
+
 /*  write4ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 116, 2048);
   printf("%d\n", read4ByteRx(port_num, PROTOCOL_VERSION));
 

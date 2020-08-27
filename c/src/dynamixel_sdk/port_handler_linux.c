@@ -238,12 +238,12 @@ double getTimeSinceStartLinux(int port_num)
 uint8_t setupPortLinux(int port_num, int cflag_baud)
 {
 
-  printf("Here setupPortLinux\n");
+  printf("Here in setupPortLinux\n");
   struct termios newtio;
   int status;
 
   portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
-
+  fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
   if (portData[port_num].socket_fd < 0)
   {
     printf("[PortHandlerLinux::SetupPort] Error opening serial port!\n");
@@ -251,10 +251,10 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   }
 
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
- 
- cfmakeraw   (&newtio) ;
- cfsetispeed (&newtio, cflag_baud) ;
- cfsetospeed (&newtio, cflag_baud) ;
+  tcgetattr(portData[port_num].socket_fd, &newtio);
+  cfmakeraw   (&newtio) ;
+  cfsetispeed (&newtio, cflag_baud) ;
+  cfsetospeed (&newtio, cflag_baud) ;
 
   newtio.c_cflag |= (CLOCAL | CREAD) ;
   newtio.c_cflag &= ~PARENB ;
@@ -278,7 +278,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
   usleep (10000) ;	// 10mS
-  digitalWrite(4, 1);
+  digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
