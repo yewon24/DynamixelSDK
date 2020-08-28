@@ -187,9 +187,12 @@ int getBytesAvailableLinux(int port_num)
 
 int readPortLinux(int port_num, uint8_t *packet, int length)
 {
-  pinMode(4, INPUT);
+  int ret = 0;
+
   usleep(10000);
-  return read(portData[port_num].socket_fd, packet, length);
+  read(portData[port_num].socket_fd, packet, length);
+
+  return ret;
 }
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
@@ -198,12 +201,12 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 
   usleep(10000);
   digitalWrite(4, HIGH);
-  
+  printf("digital write 1");
   ret=write(portData[port_num].socket_fd, packet, length);
-
+  printf("write");
   usleep(10000);
   digitalWrite(4, LOW);
-
+  printf("digital write 0");
   return ret;
 }
 
@@ -287,7 +290,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
 
   ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
-  usleep (10000) ;	// 10mS
+//  usleep (10000) ;	// 10mS
 //  digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
