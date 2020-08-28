@@ -120,7 +120,7 @@ int portHandlerLinux(const char *port_name)
 
   setPortNameLinux(port_num, port_name);
  
-  // pinMode(4, OUTPUT); 
+  pinMode(4, OUTPUT); 
 
   return port_num;
 }
@@ -194,18 +194,15 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 {
   int ret=0;
 
-  pinMode(4, OUTPUT);
-//  usleep(10000);
+  // usleep(10);
   digitalWrite(4, HIGH);
-  usleep(40);
+  // usleep(40);
   
   ret=write(portData[port_num].socket_fd, packet, length);
   
-  usleep(40);
+  // usleep(40);
   digitalWrite(4, LOW);
-  usleep(40);
-
-  pinMode(4, INPUT);
+  // usleep(40);
 
   return ret;
 }
