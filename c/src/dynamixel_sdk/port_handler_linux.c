@@ -193,11 +193,12 @@ int readPortLinux(int port_num, uint8_t *packet, int length)
 int writePortLinux(int port_num, uint8_t *packet, int length)
 {
 //  usleep(10000);
-//  digitalWrite(4, HIGH);
+  digitalWrite(4, HIGH);
+  usleep(40);
   int ret=0;
   ret=write(portData[port_num].socket_fd, packet, length);
-//  usleep(10000);
-//  digitalWrite(4, LOW);
+  usleep(40000);
+  digitalWrite(4, LOW);
   return ret;
 }
 
