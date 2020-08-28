@@ -251,7 +251,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   struct termios newtio;
   int status;
 
-  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY );
   fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
   if (portData[port_num].socket_fd < 0)
   {
@@ -280,12 +280,12 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   tcflush(portData[port_num].socket_fd, TCIFLUSH);
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
-  ioctl (portData[port_num].socket_fd, TIOCMGET, &newtio);
+  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
 
   status |= TIOCM_DTR ;
   status |= TIOCM_RTS ;
 
-  ioctl (portData[port_num].socket_fd, TIOCMSET, &newtio);
+  ioctl (portData[port_num].socket_fd, TIOCMSET, &staus);
 
   // usleep (10000) ;	// 10mS
   // digitalWrite(4, HIGH);
