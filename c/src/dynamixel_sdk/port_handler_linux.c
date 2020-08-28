@@ -251,7 +251,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   struct termios newtio;
   int status;
 
-  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY );
+  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
   fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
   if (portData[port_num].socket_fd < 0)
   {
