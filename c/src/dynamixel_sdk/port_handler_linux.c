@@ -251,7 +251,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   struct termios newtio;
   // int status;
 
-  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY );
   fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
   if (portData[port_num].socket_fd < 0)
   {
@@ -260,26 +260,19 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   }
 
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
-  // tcgetattr(portData[port_num].socket_fd, &newtio);
-  // cfmakeraw   (&newtio) ;
-  // cfsetispeed (&newtio, cflag_baud) ;
-  // cfsetospeed (&newtio, cflag_baud) ;
+  tcgetattr(portData[port_num].socket_fd, &newtio);
+  cfmakeraw   (&newtio) ;
+  cfsetispeed (&newtio, cflag_baud) ;
+  cfsetospeed (&newtio, cflag_baud) ;
 
-  // newtio.c_cflag |= (CLOCAL | CREAD) ;
-  // newtio.c_cflag &= ~PARENB ;
-  // newtio.c_cflag &= ~CSTOPB ;
-  // newtio.c_cflag &= ~CSIZE ;
-  // newtio.c_cflag |= CS8 ;
-  // newtio.c_oflag &= ~OPOST ;
-  // newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
-  // newtio.c_cc[VTIME] = 100;
-  // newtio.c_cc[VMIN] = 0;
-
-  newtio.c_cflag = cflag_baud | CS8 | CLOCAL | CREAD;
-  newtio.c_iflag = IGNPAR;
-  newtio.c_oflag = 0;
-  newtio.c_lflag = 0;
-  newtio.c_cc[VTIME] = 0;
+  newtio.c_cflag |= (CLOCAL | CREAD) ;
+  newtio.c_cflag &= ~PARENB ;
+  newtio.c_cflag &= ~CSTOPB ;
+  newtio.c_cflag &= ~CSIZE ;
+  newtio.c_cflag |= CS8 ;
+  newtio.c_oflag &= ~OPOST ;
+  newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
+  newtio.c_cc[VTIME] = 100;
   newtio.c_cc[VMIN] = 0;
 
 
