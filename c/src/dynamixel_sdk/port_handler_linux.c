@@ -197,12 +197,14 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
   pinMode(4, OUTPUT);
 //  usleep(10000);
   digitalWrite(4, HIGH);
-  // usleep(40);
+  usleep(40);
   
   ret=write(portData[port_num].socket_fd, packet, length);
-
-  // usleep(40);
+  
+  usleep(40);
   digitalWrite(4, LOW);
+  usleep(40);
+
   pinMode(4, INPUT);
 
   return ret;
