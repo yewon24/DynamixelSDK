@@ -280,12 +280,12 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   tcflush(portData[port_num].socket_fd, TCIFLUSH);
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
-  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
+  ioctl (portData[port_num].socket_fd, TIOCMGET, &newtio);
 
   status |= TIOCM_DTR ;
   status |= TIOCM_RTS ;
 
-  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
+  ioctl (portData[port_num].socket_fd, TIOCMSET, &newtio);
 
   // usleep (10000) ;	// 10mS
   // digitalWrite(4, HIGH);
