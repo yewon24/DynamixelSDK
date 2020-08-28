@@ -187,12 +187,8 @@ int getBytesAvailableLinux(int port_num)
 
 int readPortLinux(int port_num, uint8_t *packet, int length)
 {
-  int ret = 0;
-
-  usleep(10000);
-  read(portData[port_num].socket_fd, packet, length);
-
-  return ret;
+  delay(40);
+  return  read(portData[port_num].socket_fd, packet, length);
 }
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
@@ -201,19 +197,19 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 
   usleep(10000);
   digitalWrite(4, HIGH);
-  printf("digital write 1");
+
   ret=write(portData[port_num].socket_fd, packet, length);
-  printf("write");
+
   usleep(10000);
   digitalWrite(4, LOW);
-  printf("digital write 0");
+
   return ret;
 }
 
 void setPacketTimeoutLinux(int port_num, uint16_t packet_length)
 {
   portData[port_num].packet_start_time = getCurrentTimeLinux();
-  portData[port_num].packet_timeout = 500; //(portData[port_num].tx_time_per_byte * (double)packet_length) + (LATENCY_TIMER * 2.0) + 2.0;
+  portData[port_num].packet_timeout = (portData[port_num].tx_time_per_byte * (double)packet_length) + (LATENCY_TIMER * 2.0) + 2.0;
 }
 
 void setPacketTimeoutMSecLinux(int port_num, double msec)

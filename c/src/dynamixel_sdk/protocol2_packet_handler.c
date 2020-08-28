@@ -387,6 +387,8 @@ void rxPacket2(int port_num)
 
   packetData[port_num].communication_result = COMM_TX_FAIL;
 
+  delay(20);
+
   while (True)
   {
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
@@ -531,6 +533,9 @@ void txRxPacket2(int port_num)
   }
 
   // rx packet
+
+  delay(150);
+
   rxPacket2(port_num);
   // check txpacket ID == rxpacket ID
   if (packetData[port_num].tx_packet[PKT_ID] != packetData[port_num].rx_packet[PKT_ID])
