@@ -285,7 +285,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   status |= TIOCM_DTR ;
   status |= TIOCM_RTS ;
 
-  ioctl (portData[port_num].socket_fd, TIOCMSET, &staus);
+  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
   // usleep (10000) ;	// 10mS
   // digitalWrite(4, HIGH);
