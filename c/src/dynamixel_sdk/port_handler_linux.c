@@ -249,7 +249,7 @@ double getTimeSinceStartLinux(int port_num)
 uint8_t setupPortLinux(int port_num, int cflag_baud)
 {
   struct termios newtio;
-  // int status;
+  int status;
 
   portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY );
   fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
