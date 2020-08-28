@@ -249,7 +249,7 @@ double getTimeSinceStartLinux(int port_num)
 uint8_t setupPortLinux(int port_num, int cflag_baud)
 {
   struct termios newtio;
-  int status;
+  // int status;
 
   portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
   fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
@@ -260,34 +260,42 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   }
 
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
-  tcgetattr(portData[port_num].socket_fd, &newtio);
-  cfmakeraw   (&newtio) ;
-  cfsetispeed (&newtio, cflag_baud) ;
-  cfsetospeed (&newtio, cflag_baud) ;
+  // tcgetattr(portData[port_num].socket_fd, &newtio);
+  // cfmakeraw   (&newtio) ;
+  // cfsetispeed (&newtio, cflag_baud) ;
+  // cfsetospeed (&newtio, cflag_baud) ;
 
-  newtio.c_cflag |= (CLOCAL | CREAD) ;
-  newtio.c_cflag &= ~PARENB ;
-  newtio.c_cflag &= ~CSTOPB ;
-  newtio.c_cflag &= ~CSIZE ;
-  newtio.c_cflag |= CS8 ;
-  newtio.c_oflag &= ~OPOST ;
-  newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
-  newtio.c_cc[VTIME] = 100;
+  // newtio.c_cflag |= (CLOCAL | CREAD) ;
+  // newtio.c_cflag &= ~PARENB ;
+  // newtio.c_cflag &= ~CSTOPB ;
+  // newtio.c_cflag &= ~CSIZE ;
+  // newtio.c_cflag |= CS8 ;
+  // newtio.c_oflag &= ~OPOST ;
+  // newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
+  // newtio.c_cc[VTIME] = 100;
+  // newtio.c_cc[VMIN] = 0;
+
+  newtio.c_cflag = cflag_baud | CS8 | CLOCAL | CREAD;
+  newtio.c_iflag = IGNPAR;
+  newtio.c_oflag = 0;
+  newtio.c_lflag = 0;
+  newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 0;
+
 
   // clean the buffer and activate the settings for the port
   tcflush(portData[port_num].socket_fd, TCIFLUSH);
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
-  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
+  // ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
 
-  status |= TIOCM_DTR ;
-  status |= TIOCM_RTS ;
+  // status |= TIOCM_DTR ;
+  // status |= TIOCM_RTS ;
 
-  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
+  // ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
-  usleep (10000) ;	// 10mS
-  digitalWrite(4, HIGH);
+  // usleep (10000) ;	// 10mS
+  // digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
