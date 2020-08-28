@@ -195,13 +195,13 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 {
   int ret=0;
 
-  // usleep(10000);
-  // digitalWrite(4, HIGH);
+  digitalWrite(4, HIGH);
+  usleep(10000);
 
   ret=write(portData[port_num].socket_fd, packet, length);
 
   // usleep(10000);
-  // digitalWrite(4, LOW);
+  digitalWrite(4, LOW);
 
   return ret;
 }
@@ -287,7 +287,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
   usleep (10000) ;	// 10mS
-  digitalWrite(4, LOW);
+  digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
