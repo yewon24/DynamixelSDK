@@ -199,7 +199,7 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 
   ret=write(portData[port_num].socket_fd, packet, length);
 
-  usleep(10000);
+  usleep(2500);
   digitalWrite(4, LOW);
 
   return ret;
@@ -258,7 +258,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
     return False;
   }
 
-  tcgetattr(portData[port_num].socket_fd, &newtio);
+//  tcgetattr(portData[port_num].socket_fd, &newtio);
   bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
 
   // cfmakeraw   (&newtio) ;
@@ -267,9 +267,9 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
 
   newtio.c_cflag = cflag_baud | CS8 | CLOCAL | CREAD;
   // newtio.c_cflag |= (CLOCAL | CREAD) ;
-  // newtio.c_cflag &= ~PARENB ;
-  // newtio.c_cflag &= ~CSTOPB ;
-  // newtio.c_cflag &= ~CSIZE ;
+  //newtio.c_cflag &= ~PARENB ;
+  //newtio.c_cflag &= ~CSTOPB ;
+  //newtio.c_cflag &= ~CSIZE ;
   // newtio.c_cflag |= CS8 ;
   newtio.c_iflag = IGNPAR;
   newtio.c_oflag = 0;
@@ -288,8 +288,8 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   // status |= TIOCM_RTS ;
   // ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
-  // usleep (10000) ;	// 10mS
-  // digitalWrite(4, HIGH);
+//   usleep (10000) ;	// 10mS
+//   digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
