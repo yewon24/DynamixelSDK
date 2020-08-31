@@ -194,12 +194,12 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 {
   int ret=0;
 
-  // usleep(10000);
+  usleep(10000);
   digitalWrite(4, HIGH);
 
   ret=write(portData[port_num].socket_fd, packet, length);
 
-  // usleep(10000);
+  usleep(10000);
   digitalWrite(4, LOW);
 
   return ret;
@@ -250,8 +250,8 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   struct termios newtio;
   // int status;
 
-  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
-  fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
+  portData[port_num].socket_fd = open(portData[port_num].port_name, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK);
+  // fcntl(portData[port_num].socket_fd, F_SETFL, O_RDWR);
   if (portData[port_num].socket_fd < 0)
   {
     printf("[PortHandlerLinux::SetupPort] Error opening serial port!\n");
