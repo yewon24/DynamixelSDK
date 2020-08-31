@@ -174,11 +174,6 @@ int main()
   {
     printf("Dynamixel has been successfully connected \n");
   }
-  
-  int r = 0;
-  r = read(portData[port_num].socket_fd, &packetData[port_num].rx_packet[rx_length], 1);
-  printf("main: %d\n", r);
-
   write4ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, 116, 512);
 
 /*  write4ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 116, 2048);

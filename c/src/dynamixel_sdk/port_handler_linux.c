@@ -272,7 +272,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   // newtio.c_cflag &= ~CSIZE ;
   // newtio.c_cflag |= CS8 ;
   newtio.c_iflag = IGNPAR;
-  newtio.c_oflag &= ~OPOST ;
+  newtio.c_oflag = 0;
   newtio.c_lflag = 0;
   // newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
   newtio.c_cc[VTIME] = 0;
