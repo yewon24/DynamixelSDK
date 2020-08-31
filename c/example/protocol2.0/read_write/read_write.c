@@ -161,7 +161,7 @@ int main()
 
 
   // Enable Dynamixel Torque
-  write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, 65, 1);
+  write1ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, 64, 1);
   if ((dxl_comm_result = getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
   {
     printf("%s\n", getTxRxResult(PROTOCOL_VERSION, dxl_comm_result));
@@ -174,12 +174,13 @@ int main()
   {
     printf("Dynamixel has been successfully connected \n");
   }
-  write4ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, 116, 512);
 
-/*  write4ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 116, 2048);
+  write4ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, 116, 512);
+  sleep(1);
+  write4ByteTxOnly(port_num, PROTOCOL_VERSION, DXL_ID, 116, 2048);
   printf("%d\n", read4ByteRx(port_num, PROTOCOL_VERSION));
 
-
+/*
  // Write goal position
     write4ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_PRO_GOAL_POSITION, 512);
     if ((dxl_comm_result = getLastTxRxResult(port_num, PROTOCOL_VERSION)) != COMM_SUCCESS)
