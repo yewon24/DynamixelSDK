@@ -386,8 +386,8 @@ void rxPacket2(int port_num)
   // minimum length ( HEADER0 HEADER1 HEADER2 RESERVED ID LENGTH_L LENGTH_H INST ERROR CRC16_L CRC16_H )
   uint16_t crc;
 
-  // usleep(10);
-  // digitalWrite(4, LOW);
+  usleep(10000);
+  digitalWrite(4, LOW);
 
   packetData[port_num].communication_result = COMM_TX_FAIL;
 
@@ -395,6 +395,7 @@ void rxPacket2(int port_num)
   {
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
 
+    usleep(10000);
     printf("%d\n", rx_length);
 
     if (rx_length >= wait_length)

@@ -187,8 +187,6 @@ int getBytesAvailableLinux(int port_num)
 
 int readPortLinux(int port_num, uint8_t *packet, int length)
 {
-  usleep(10000);
-  digitalWrite(4, LOW);
   return read(portData[port_num].socket_fd, packet, length);
 }
 
@@ -275,6 +273,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   // newtio.c_cflag |= CS8 ;
   newtio.c_iflag = IGNPAR;
   newtio.c_oflag &= ~OPOST ;
+  newtio.c_lflag = 0;
   // newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
   newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 0;
@@ -289,8 +288,8 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   // status |= TIOCM_RTS ;
   // ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
-  // usleep (10000) ;	// 10mS
-  // digitalWrite(4, HIGH);
+  usleep (10000) ;	// 10mS
+  digitalWrite(4, HIGH);
 
   portData[port_num].tx_time_per_byte = (1000.0 / (double)portData[port_num].baudrate) * 10.0;
   return True;
