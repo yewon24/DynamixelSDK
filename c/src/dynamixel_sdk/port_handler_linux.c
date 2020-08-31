@@ -187,7 +187,9 @@ int getBytesAvailableLinux(int port_num)
 
 int readPortLinux(int port_num, uint8_t *packet, int length)
 {
-  return  read(portData[port_num].socket_fd, packet, length);
+  usleep(10000);
+  digitalWrite(4, LOW);
+  return read(portData[port_num].socket_fd, packet, length);
 }
 
 int writePortLinux(int port_num, uint8_t *packet, int length)
@@ -199,8 +201,8 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 
   ret=write(portData[port_num].socket_fd, packet, length);
 
-  usleep(10000);
-  digitalWrite(4, LOW);
+  // usleep(10000);
+  // digitalWrite(4, LOW);
 
   return ret;
 }
@@ -273,7 +275,7 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   // newtio.c_cflag |= CS8 ;
   newtio.c_iflag = IGNPAR;
   newtio.c_oflag &= ~OPOST ;
-  newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
+  // newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
   newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 0;
 
