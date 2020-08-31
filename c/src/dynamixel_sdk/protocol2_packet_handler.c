@@ -393,7 +393,6 @@ void rxPacket2(int port_num)
 
   while (True)
   {
-    usleep(10000);
     rx_length += readPort(port_num, &packetData[port_num].rx_packet[rx_length], wait_length - rx_length);
 
     printf("%d\n", rx_length);
