@@ -195,13 +195,13 @@ int writePortLinux(int port_num, uint8_t *packet, int length)
 {
   int ret=0;
 
-  // usleep(10000);
-  // digitalWrite(4, HIGH);
+  usleep(10000);
+  digitalWrite(4, HIGH);
 
   ret=write(portData[port_num].socket_fd, packet, length);
 
-  // usleep(10000);
-  // digitalWrite(4, LOW);
+  usleep(10000);
+  digitalWrite(4, LOW);
 
   return ret;
 }
@@ -259,20 +259,23 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
     return False;
   }
 
-  bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
   tcgetattr(portData[port_num].socket_fd, &newtio);
-  cfmakeraw   (&newtio) ;
-  cfsetispeed (&newtio, cflag_baud) ;
-  cfsetospeed (&newtio, cflag_baud) ;
+  bzero(&newtio, sizeof(newtio)); // clear struct for new port settings
 
-  newtio.c_cflag |= (CLOCAL | CREAD) ;
-  newtio.c_cflag &= ~PARENB ;
-  newtio.c_cflag &= ~CSTOPB ;
-  newtio.c_cflag &= ~CSIZE ;
-  newtio.c_cflag |= CS8 ;
+  // cfmakeraw   (&newtio) ;
+  // cfsetispeed (&newtio, cflag_baud) ;
+  // cfsetospeed (&newtio, cflag_baud) ;
+
+  newtio.c_cflag = cflag_baud | CS8 | CLOCAL | CREAD;
+  // newtio.c_cflag |= (CLOCAL | CREAD) ;
+  // newtio.c_cflag &= ~PARENB ;
+  // newtio.c_cflag &= ~CSTOPB ;
+  // newtio.c_cflag &= ~CSIZE ;
+  // newtio.c_cflag |= CS8 ;
+  newtio.c_iflag = IGNPAR;
   newtio.c_oflag &= ~OPOST ;
   newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
-  newtio.c_cc[VTIME] = 100;
+  newtio.c_cc[VTIME] = 0;
   newtio.c_cc[VMIN] = 0;
 
 
@@ -280,12 +283,10 @@ uint8_t setupPortLinux(int port_num, int cflag_baud)
   tcflush(portData[port_num].socket_fd, TCIFLUSH);
   tcsetattr(portData[port_num].socket_fd, TCSANOW, &newtio);
 
-  ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
-
-  status |= TIOCM_DTR ;
-  status |= TIOCM_RTS ;
-
-  ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
+  // ioctl (portData[port_num].socket_fd, TIOCMGET, &status);
+  // status |= TIOCM_DTR ;
+  // status |= TIOCM_RTS ;
+  // ioctl (portData[port_num].socket_fd, TIOCMSET, &status);
 
   // usleep (10000) ;	// 10mS
   // digitalWrite(4, HIGH);

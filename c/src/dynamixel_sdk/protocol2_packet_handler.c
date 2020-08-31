@@ -359,13 +359,13 @@ void txPacket2(int port_num)
 
   // tx packet
   // usleep(10000);
-  digitalWrite(4, HIGH);
+  // digitalWrite(4, HIGH);
 
   clearPort(port_num);
   written_packet_length = writePort(port_num, packetData[port_num].tx_packet, total_packet_length);
   
-  usleep(10);
-  digitalWrite(4, LOW);
+  // usleep(10);
+  // digitalWrite(4, LOW);
 
   if (total_packet_length != written_packet_length)
   {
@@ -386,8 +386,8 @@ void rxPacket2(int port_num)
   // minimum length ( HEADER0 HEADER1 HEADER2 RESERVED ID LENGTH_L LENGTH_H INST ERROR CRC16_L CRC16_H )
   uint16_t crc;
 
-  usleep(10);
-  digitalWrite(4, LOW);
+  // usleep(10);
+  // digitalWrite(4, LOW);
 
   packetData[port_num].communication_result = COMM_TX_FAIL;
 
